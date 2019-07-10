@@ -2,6 +2,7 @@ import React from 'react';
 import ProductCard from './product-card';
 import productService from '../services/ProductService';
 import ProductForm from './product-form';
+import ProductView from '../components/product-view';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 class ProductPage extends React.Component {
@@ -64,7 +65,7 @@ class ProductPage extends React.Component {
                     <button className="btn btn-info" onClick={() => this.handleCreateProductClick()}>Create product</button>
                 </div>
                 {this.getProducts().map((value, index) => {
-                    return <ProductCard key={value.id} name={value.name} description={value.description} />
+                    return <ProductCard key={value.id} id={value.id} name={value.name} description={value.description} />
                 })}
             </React.Fragment>
         )
