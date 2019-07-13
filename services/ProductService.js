@@ -21,8 +21,18 @@ class ProductService{
         return res.data;
     }
 
-    edit(){
+    async edit(params){
+        const res = await this.apiService.putRequest(this.apiPath, params);
+        return res.data;
+    }
 
+    async delete(params){
+        const res = await this.apiService.deleteRequest(this.apiPath, params);
+        if(res.status == 200){
+            return {success: true};
+        }else{
+            return {success: false};
+        }
     }
 
 }

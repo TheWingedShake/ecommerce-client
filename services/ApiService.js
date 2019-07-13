@@ -20,12 +20,16 @@ class ApiService{
         return res
     }
 
-    putRequest(path, params = {}){
+    async putRequest(path, params = {}){
+        const res = await axios.put(`${this.apiUrl}/${path}`, params);
 
+        return res;
     }
 
-    deleteRequest(path, params = {}){
+    async deleteRequest(path = '', params = {}){
+        const res = await axios.delete(`${this.apiUrl}/${path}`, {data: params});
 
+        return res;
     }
 
 }

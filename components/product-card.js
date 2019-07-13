@@ -5,23 +5,34 @@ class ProductCard extends React.Component {
 
     constructor(props){
         super();
-        this.state = {
-            name: props.name,
-            description: props.description,
-            id: props.id
-        };
+    }
+
+    handleDelete(){
+        this.props.handleDelete({
+            name: 'delete product',
+            id: this.props.id
+        });
+    }
+
+    handleEdit(){
+        this.props.handleEdit({
+            name: 'edit product',
+            id: this.props.id
+        });
     }
 
     render() {
-        const path = `/admin/abstract-product/${this.state.id}`;
+        const path = `/admin/abstract-product/${this.props.id}`;
         return (
             <div className="card mb-4">
-                <div className="card-header">{this.state.name}</div>
+                <div className="card-header">{this.props.name}</div>
                 <div className="card-body">
-                    {this.state.description}
+                    {this.props.description}
                 </div>
                 <div className="card-footer">
-                    <Link className="btn btn-primary" to={path}>View</Link>
+                    <Link className="btn btn-primary mr-4" to={path}>View</Link>
+                    <button className="btn btn-info mr-4" onClick={() => this.handleEdit()}>Edit</button>
+                    <button className="btn btn-danger" onClick={() => this.handleDelete()}>Delete</button>
                 </div>
             </div>
         );
