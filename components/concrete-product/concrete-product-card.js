@@ -9,16 +9,16 @@ class ConcreteProductCard extends React.Component{
     }
 
     handleEdit(){
-
+        this.props.handleEdit({id: this.props.product.id});
     }
 
     handleDelete(){
-
+        this.props.handleDelete({id: this.props.product.id});
     }
 
     render(){
         return(
-            <div className="card">
+            <div className="card mb-4">
                 <div className="card-header">{this.props.product.name}</div>
                 <div className="card-body">
                     <div className="card-title">Based on {this.props.product.product.name}</div>

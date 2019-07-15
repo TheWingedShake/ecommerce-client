@@ -13,7 +13,8 @@ class ConctreteProductPage extends React.Component{
             products: [],
             productDetails: [],
             concreteProducts: [],
-            isOpenForm: false
+            isOpenForm: false,
+            selectedId: -1
         }
         this.productService = productService;
         this.productDetailService = productDetailService;
@@ -44,27 +45,76 @@ class ConctreteProductPage extends React.Component{
         });
     }
 
+    handleEdit(e){
+        this.setState({
+            isOpenForm: true,
+            selectedId: e.id
+        });
+    }
+
     handleCancelForm(){
         this.setState({
-            isOpenForm: false
+            isOpenForm: false,
+            selectedId: -1
         });
     }
 
     handleSubmitForm(e){
-        this.concreteProductService.create(e).then(data => {
-            this.setState({isOpenForm: false});
-            if(data.id){
+        if(e.id){
+            this.concreteProductService.edit({id:e.id ,name: e.name, description: e.description, product: {id: parseInt(e.productId, 10)}, productDetails: e.productDetails}).then(data => {
+                this.setState({isOpenForm: false, selectedId: -1});
+                if(data.id){
+                    const concreteProducts = this.state.concreteProducts.slice();
+                    this.setState({
+                        concreteProducts: concreteProducts.map(item => {
+                            if(item.id == data.id){
+                                return data;
+                            }
+                            return item;
+                        })
+                    });
+                }
+            });
+        }else{
+            this.concreteProductService.create({name: e.name, description: e.description, product: {id: e.productId}, productDetails: e.productDetails}).then(data => {
+                this.setState({isOpenForm: false});
+                if(data.id){
+                    const concreteProducts = this.state.concreteProducts.slice();
+                    concreteProducts.push(data);
+                    this.setState({
+                        concreteProducts: concreteProducts
+                    });
+                }
+            });
+        }
+    }
+
+    handleDelete(e){
+        this.concreteProductService.delete(e).then(data => {
+            if(data.success){
+                console.log('Product deleted successfully');
                 const concreteProducts = this.state.concreteProducts.slice();
-                concreteProducts.push(data);
                 this.setState({
-                    concreteProducts: concreteProducts
+                    concreteProducts: concreteProducts.filter(item => item.id != e.id)
                 });
+            }else{
+                console.log('Error with product deleting');
             }
-        });
+        })
     }
 
     getForm(){
-        return(<ConcreteProductForm handleCancel={() => this.handleCancelForm()} handleSubmit={(e) => this.handleSubmitForm(e)} products={this.state.products}></ConcreteProductForm>);
+        let concreteProduct = this.state.concreteProducts.find(item => item.id == this.state.selectedId);
+        if(!concreteProduct){
+            concreteProduct = {
+                id: '',
+                name: '',
+                description: '',
+                product: {id: ''},
+                productDetails: []
+            }
+        }
+        return(<ConcreteProductForm concreteProduct={concreteProduct} handleCancel={() => this.handleCancelForm()} handleSubmit={(e) => this.handleSubmitForm(e)} products={this.state.products} productDetails={this.state.productDetails}></ConcreteProductForm>);
     }
 
     getOverview(){
@@ -74,7 +124,7 @@ class ConctreteProductPage extends React.Component{
                     <button className="btn btn-info" onClick={() => this.handleCreateClick()}>Create new product</button>
                 </div>
                 {this.state.concreteProducts.map(item => {
-                    return <ConcreteProductCard key={item.id} product={item}></ConcreteProductCard>
+                    return <ConcreteProductCard handleDelete={(e) => this.handleDelete(e)} handleEdit={(e) => this.handleEdit(e)} key={item.id} product={item}></ConcreteProductCard>
                 })}
             </React.Fragment>
         )
