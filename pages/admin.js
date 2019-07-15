@@ -1,9 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AppHeader from '../components/header';
-import AppFooter from '../components/footer';
+import AppHeader from '../components/common/header';
+import AppFooter from '../components/common/footer';
 import dynamic from 'next/dynamic';
 const DynanicProductPage = dynamic(
-    () => import('../components/admin-page.js'),
+    () => import('../components/common/admin-page.js'),
     {
         ssr: false
     }

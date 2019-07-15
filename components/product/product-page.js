@@ -1,8 +1,8 @@
 import React from 'react';
 import ProductCard from './product-card';
-import productService from '../services/ProductService';
+import productService from '../../services/ProductService';
 import ProductForm from './product-form';
-import ProductView from '../components/product-view';
+import ProductView from './product-view';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 class ProductPage extends React.Component {
